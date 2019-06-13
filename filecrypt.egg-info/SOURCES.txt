@@ -1,0 +1,7 @@
+README.md
+setup.py
+FileCrypt/__init__.py
+filecrypt.egg-info/PKG-INFO
+filecrypt.egg-info/SOURCES.txt
+filecrypt.egg-info/dependency_links.txt
+filecrypt.egg-info/top_level.txt
