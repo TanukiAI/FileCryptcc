@@ -34,8 +34,32 @@ def containerCreate(apikey,name,mirrors,password=None,captcha=None,allow_cnl=Non
 	This function allows you to create an filecrypt.cc protected folder.
 	apikey: Your ApiKey from FileCrypt
 	name: name of your folder
-	mirrors: mirrors in a listed list (example: [[mirror_0_link1,mirror_0_link2],[mirror_1_link1] ) 
-		all strings in the first list (where the other lists should be) will be skipped
+	mirrors: mirrors in a tripple listed list  
+		example: [[[mirror_0_link1,mirror_0_link2],[mirror_0_backup_link1,mirror_0_backup_link2]],[[mirror_1_link1,mirror_1_link2],[mirror_1_backup_link1,mirror_1_backup_link2]]]
+		prettyprinted example:
+        [
+          [
+            [
+              "mirror_0_link1",
+              "mirror_0_link2"
+            ],
+            [
+              "mirror_0_backup_link1",
+              "mirror_0_backup_link2"
+            ]
+          ],
+          [
+            [
+              "mirror_1_link1",
+              "mirror_1_link2"
+            ],
+            [
+              "mirror_1_backup_link1",
+              "mirror_1_backup_link2"
+            ]
+          ]
+        ]
+		all strings in the first and second list (where the other lists should be) will be skipped
 	password(optional): password of your folder
 	captcha(optional): enable captcha? Allowed Values: 0,1
 	allow_cnl(optional): enable cnl? Allowed Values: 0,1
@@ -49,7 +73,10 @@ def containerCreate(apikey,name,mirrors,password=None,captcha=None,allow_cnl=Non
 		if isinstance(mirrors[i],str):
 			continue
 		for j in range(len(mirrors[i])):
-			data["mirror_1["+str(i)+"]["+str(j)+"]"] = mirrors[i][j]
+			if isinstance(mirrors[i][j],str):
+				continue
+			for k in range(len(mirrors[i][j])):
+				data["mirror_"+str(i+1)+"["+str(j)+"]["+str(k)+"]"] = mirrors[i][j][k]
 			
 	if password != None:
 		data["folderpass"] = password
@@ -75,8 +102,8 @@ def containerEdit(apikey,name,mirrors,container_id,password=None,captcha=None,al
 	apikey: Your ApiKey from FileCrypt
 	name: name of your folder
 	container_id: the container_id as string
-	mirrors: mirrors in a listed list (example: [[mirror_0_link1,mirror_0_link2],[mirror_1_link1] ) 
-		all strings in the first list (where the other lists should be) will be skipped
+	mirrors: same as containerCreate()
+		
 	password(optional): password of your folder
 	captcha(optional): enable captcha? Allowed Values: 0,1
 	allow_cnl(optional): enable cnl? Allowed Values: 0,1
@@ -90,7 +117,10 @@ def containerEdit(apikey,name,mirrors,container_id,password=None,captcha=None,al
 		if isinstance(mirrors[i],str):
 			continue
 		for j in range(len(mirrors[i])):
-			data["mirror_1["+str(i)+"]["+str(j)+"]"] = mirrors[i][j]
+			if isinstance(mirrors[i][j],str):
+				continue
+			for k in range(len(mirrors[i][j])):
+				data["mirror_"+str(i+1)+"["+str(j)+"]["+str(k)+"]"] = mirrors[i][j][k]
 			
 	if password != None:
 		data["folderpass"] = password
@@ -204,13 +234,3 @@ def groupRemove(apikey,groupid):
 	"""
 	data={"api_key":apikey,"fn":"group","sub":"remove","id":str(groupid)}
 	return json.loads(requests.post("https://filecrypt.cc/api.php",data=data).text)
-
-
-
-
-
-
-
-
-
-	
