@@ -92,7 +92,7 @@ def containerCreate(apikey,name,mirrors,password=None,captcha=None,allow_cnl=Non
 		data["group"] = str(groupid)
 	return json.loads(requests.post("https://filecrypt.cc/api.php",data=data).text)
 
-def containerEdit(apikey,name,mirrors,container_id,password=None,captcha=None,allow_cnl=None,allow_dlc=None,allow_links=None,groupid=None):
+def containerEdit(apikey,mirrors,container_id,name=None,password=None,captcha=None,allow_cnl=None,allow_dlc=None,allow_links=None,groupid=None):
 	"""
 	This function allows you to edit an filecrypt.cc protected folder.
 	Once you submit mirror_1 all links are permanently removed from this folder and will be replaced with the once submitted.
@@ -100,7 +100,7 @@ def containerEdit(apikey,name,mirrors,container_id,password=None,captcha=None,al
 	For informations on statusimages please visit https://filecrypt.cc/docs/index.htm#api-General-Statusimages
 	
 	apikey: Your ApiKey from FileCrypt
-	name: name of your folder
+	name(optional): name of your folder
 	container_id: the container_id as string
 	mirrors: same as containerCreate()
 		
@@ -122,6 +122,8 @@ def containerEdit(apikey,name,mirrors,container_id,password=None,captcha=None,al
 			for k in range(len(mirrors[i][j])):
 				data["mirror_"+str(i+1)+"["+str(j)+"]["+str(k)+"]"] = mirrors[i][j][k]
 			
+	if name != None:
+		data["name"] = name
 	if password != None:
 		data["folderpass"] = password
 	if captcha != None:
